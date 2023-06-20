@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Product_Catalog.ViewModels;
 
 namespace Product_Catalog.Models
 {
@@ -24,5 +25,6 @@ namespace Product_Catalog.Models
 
         public DbSet<Product> Products { get; set;}
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product_Catalog.ViewModels.ProductsViewModel> ProductsViewModel { get; set; } = default!;
     }
 }

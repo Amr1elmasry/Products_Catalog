@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Product_Catalog.Interfaces;
 using Product_Catalog.Models;
 using Product_Catalog.Seeds;
+using Product_Catalog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.AddDbContext<ProductsCatalogDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ProductsCatalogDbContext>();
 
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 using var scope = builder.Services.BuildServiceProvider().CreateScope();
