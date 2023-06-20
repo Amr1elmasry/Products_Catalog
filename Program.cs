@@ -32,7 +32,11 @@ var logger = loggerFactory.CreateLogger("app");
 
 try
 {
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var context = services.GetRequiredService<ProductsCatalogDbContext>();
+    await RolesSeeding.SeedAsync(roleManager);
+    await AdminsSeeding.SeedAdminAsync(userManager, roleManager);
     await CategorySeeding.SeedCategories(context);
 
     logger.LogInformation("Categories seeded");
