@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using Product_Catalog.Interfaces;
 using Product_Catalog.Models;
 using Product_Catalog.Seeds;
@@ -17,9 +18,22 @@ builder.Services.AddDbContext<ProductsCatalogDbContext>(options =>
 },
     ServiceLifetime.Transient);
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ProductsCatalogDbContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true);
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ProductsCatalogDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddMvc().AddNToastNotifyToastr(new NToastNotify.ToastrOptions()
+{
+    ProgressBar = true,
+    PositionClass = ToastPositions.TopRight,
+    PreventDuplicates = true,
+    CloseButton = true,
+});
+
+builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
@@ -66,10 +80,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllers();
+
+app.MapRazorPages();
 app.Run();

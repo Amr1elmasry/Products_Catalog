@@ -12,6 +12,7 @@ namespace Product_Catalog.Models
         public string? Description { get; set; }
         public double? Price { get; set; }
         public DateTime? CreationDate { get; set; } = DateTime.Now;
+        [DataType(DataType.Date)]
         public DateTime? StartDate { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "You must add the Duration Days")]
         public int DurationInDays { get; set; }
