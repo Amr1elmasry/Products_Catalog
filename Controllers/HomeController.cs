@@ -11,6 +11,7 @@ using Product_Catalog.Interfaces;
 using Product_Catalog.Models;
 using Product_Catalog.ViewModels;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Product_Catalog.Controllers
 {
@@ -31,15 +32,18 @@ namespace Product_Catalog.Controllers
             _roleManager = roleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([Optional, FromQuery] int? CategoryId)
         {
             var user = await _userManager.GetUserAsync(User);
             if(user==null || (await _userManager.GetRolesAsync(user)).Any(r=>r != RolesNames.Admin))
             {
                 return RedirectToAction("Index","Products");
             }
-
-            var products = await _productService.GetAll();
+            var categories = await _context.Categories.ToListAsync();
+            ViewData["categories"] = categories.Select(c => new CategoryFilter { Id = c.Id, Name = c.CategoryName });
+            if(CategoryId!=null || CategoryId !=0 )
+                ViewData["SelectedCategory"] = categories.Find(c => c.Id == CategoryId)?.CategoryName;
+            var products = await _productService.GetAllProducts(CategoryId);
             var output = products.Adapt<IEnumerable<ProductsViewModel>>();
             return View(output);
         }

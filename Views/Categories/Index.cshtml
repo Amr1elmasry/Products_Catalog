@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Product_Catalog.Models.Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="col d-flex justify-content-between">
+    <h1>Categories</h1>
+    <p>
+        <a style="text-align:end" class="btn btn-warning" asp-action="Create">Create New</a>
+    </p>
+</div>
+<table class="table">
+    <thead class="table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="btn btn-primary m-1" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-secondary m-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                        <a class="btn btn-info m-1" asp-action="Index" asp-controller="Home" asp-route-CategoryId="@item.Id">View Products</a>
+                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

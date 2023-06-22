@@ -21,10 +21,15 @@ namespace Product_Catalog.Seeds
                 {
                     CategoryName = "Home"
                 };
+                var Phones = new Category
+                {
+                    CategoryName = "Phones"
+                };
 
                 await context.AddAsync(Electronics);
                 await context.AddAsync(Computers);
                 await context.AddAsync(Home);
+                await context.AddAsync(Phones);
                 await context.SaveChangesAsync();
             }
         }

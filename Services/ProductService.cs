@@ -4,6 +4,7 @@ using Product_Catalog.Dtos;
 using Product_Catalog.Interfaces;
 using Product_Catalog.Models;
 using Product_Catalog.ViewModels;
+using System.Runtime.InteropServices;
 
 namespace Product_Catalog.Services
 {
@@ -13,9 +14,34 @@ namespace Product_Catalog.Services
         {
         }
 
-        public async Task<IEnumerable<Product>> ActiveProducts()
+        public async Task<IEnumerable<Product>> ActiveProducts([Optional] int? CategoryId)
         {
-            var products = await FindAll(p=>p.StartDate!.Value.AddDays(p.DurationInDays) > DateTime.Now);
+            var products = Enumerable.Empty<Product>();
+            if (CategoryId == null || CategoryId == 0)
+            {
+                products = await FindAll(p => p.StartDate!.Value.AddDays(p.DurationInDays) > DateTime.Now);
+            }
+            else
+            {
+                products = await FindAll(p => p.StartDate!.Value.AddDays(p.DurationInDays) > DateTime.Now &&
+                    p.CategoryId == CategoryId);
+            }
+            if (products == null)
+                return Enumerable.Empty<Product>();
+            return products;
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProducts([Optional] int? CategoryId)
+        {
+            var products = Enumerable.Empty<Product>();
+            if (CategoryId == null || CategoryId == 0)
+            {
+                products = await GetAll();
+            }
+            else
+            {
+                products = await FindAll(p =>p.CategoryId == CategoryId);
+            }
             if (products == null)
                 return Enumerable.Empty<Product>();
             return products;

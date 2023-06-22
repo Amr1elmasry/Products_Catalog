@@ -4,16 +4,45 @@
     ViewData["Title"] = "All Products";
 }
 
-<h1>Index</h1>
+<h1 style="text-align:center">All Products</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@if (!Model.Any())
+
+<div class="col d-flex justify-content-between">
+    <p>
+        <a style="text-align:end" class="btn btn-warning" asp-action="Create">Create New</a>
+    </p>
+    <div class="dropdown pt-2" style="text-align:end">
+        @{
+            var x = "";
+            if (ViewBag.SelectedCategory != null)
+            {
+                x = @ViewBag.SelectedCategory;
+                
+            }
+            else
+            {
+                x = "Select Category";
+            }
+            
+        }
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            @x
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" asp-action="Index" asp-controller="Home">All Categories</a></li>
+            @foreach (CategoryFilter cat in ViewBag.categories)
+            {
+                <li><a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-CategoryId="@cat.Id">@cat.Name</a></li>
+            }
+        </ul>
+    </div>
+</div>
+@if (Model == null || !Model.Any())
 {
-    <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
-        No Product found!
+    
+    <div class="text-center mt-5">
+        <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
     </div>
 }
 else
@@ -26,9 +55,6 @@ else
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CreationDate)
@@ -45,6 +71,9 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.CategoryId)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -56,9 +85,6 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationDate)
@@ -75,10 +101,16 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.CategoryId)
                 </td>
+                <td style="font-size:smaller">
+                    @Html.DisplayFor(modelItem => item.Price) EGP
+                </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </div>
+                    
                 </td>
             </tr>
     }
