@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using Product_Catalog.Classes;
 using Product_Catalog.Models;
 
@@ -15,10 +16,13 @@ namespace Product_Catalog.Controllers
     public class CategoriesController : Controller
     {
         private readonly ProductsCatalogDbContext _context;
+        private readonly IToastNotification _toastNotification;
 
-        public CategoriesController(ProductsCatalogDbContext context)
+
+        public CategoriesController(ProductsCatalogDbContext context, IToastNotification toastNotification)
         {
             _context = context;
+            _toastNotification = toastNotification;
         }
 
         public async Task<IActionResult> Index()
@@ -30,13 +34,15 @@ namespace Product_Catalog.Controllers
         {
             if (id == null || _context.Categories == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("No category found !");
+                return RedirectToAction(nameof(Index));
             }
 
             var category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("No category found with this id !");
+                return RedirectToAction(nameof(Index));
             }
 
             return View(category);
@@ -65,13 +71,15 @@ namespace Product_Catalog.Controllers
         {
             if (id == null || _context.Categories == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("No category found !");
+                return RedirectToAction(nameof(Index));
             }
 
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("No category found with this id !");
+                return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
@@ -81,7 +89,8 @@ namespace Product_Catalog.Controllers
         {
             if (id != category.Id)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("this two ids are not match !");
+                return RedirectToAction(nameof(Index));
             }
 
             if (ModelState.IsValid)
@@ -95,11 +104,13 @@ namespace Product_Catalog.Controllers
                 {
                     if (!CategoryExists(category.Id))
                     {
-                        return NotFound();
+                        _toastNotification.AddErrorToastMessage("No category found with this id !");
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        throw;
+                        _toastNotification.AddErrorToastMessage("Something went wrong !");
+                        return RedirectToAction(nameof(Index));
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -111,14 +122,16 @@ namespace Product_Catalog.Controllers
         {
             if (id == null || _context.Categories == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("Something went wrong !");
+                return RedirectToAction(nameof(Index));
             }
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
-                return NotFound();
+                _toastNotification.AddErrorToastMessage("No category found with this id !");
+                return RedirectToAction(nameof(Index));
             }
 
             return View(category);
@@ -130,7 +143,8 @@ namespace Product_Catalog.Controllers
         {
             if (_context.Categories == null)
             {
-                return Problem("Entity set 'ProductsCatalogDbContext.Categories'  is null.");
+                _toastNotification.AddErrorToastMessage("Something went wrong !");
+                return RedirectToAction(nameof(Index));
             }
             var category = await _context.Categories.FindAsync(id);
             if (category != null)

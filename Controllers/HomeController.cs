@@ -79,6 +79,18 @@ namespace Product_Catalog.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            var product = await _productService.FindById(id!.Value);
+            if (product == null)
+            {
+                _toastNotification.AddErrorToastMessage("No product found with this Id !");
+                return RedirectToAction("Index");
+            }
+            var output = product.Adapt<ActiveProductViewModel>();
+            output.CategoryName = _context.Categories.Find(product.CategoryId)?.CategoryName;
+            return View(output);
+        }
 
         [Authorize(Roles = RolesNames.Admin)]
         [HttpGet]
