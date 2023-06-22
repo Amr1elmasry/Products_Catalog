@@ -1,0 +1,53 @@
+﻿@using Product_Catalog.Classes;
+@model Product_Catalog.ViewModels.ActiveProductViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details of @Model.Name</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+</div>
+<div class="col-3 d-flex justify-content-between">
+    @{
+        if(User.IsInRole(RolesNames.Admin))
+        {
+            <a class="btn btn-success" asp-action="Edit" asp-controller="Home" asp-route-id="@Model?.Id">Edit</a>
+        }
+    }
+    <a class = "btn btn-info" asp-action="Index">Back to List</a>
+</div>

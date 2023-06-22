@@ -6,6 +6,7 @@ namespace Product_Catalog.Interfaces
 {
     public interface IProductService : IBaseRepository<Product>
     {
+        Task<IEnumerable<Product>> ActiveProducts();
         Task<ReturnProduct> CreateProduct(CreateProductDto productDto);
         Task<ReturnProduct> EditProduct(ProductsViewModel model);
     }

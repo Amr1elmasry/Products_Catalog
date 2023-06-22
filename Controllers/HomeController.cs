@@ -36,7 +36,7 @@ namespace Product_Catalog.Controllers
             var user = await _userManager.GetUserAsync(User);
             if(user==null || (await _userManager.GetRolesAsync(user)).Any(r=>r != RolesNames.Admin))
             {
-                return RedirectToAction("Index","Product");
+                return RedirectToAction("Index","Products");
             }
 
             var products = await _productService.GetAll();

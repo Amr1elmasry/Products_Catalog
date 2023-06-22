@@ -13,6 +13,13 @@ namespace Product_Catalog.Services
         {
         }
 
+        public async Task<IEnumerable<Product>> ActiveProducts()
+        {
+            var products = await FindAll(p=>p.StartDate!.Value.AddDays(p.DurationInDays) > DateTime.Now);
+            if (products == null)
+                return Enumerable.Empty<Product>();
+            return products;
+        }
 
         public async Task<ReturnProduct> CreateProduct(CreateProductDto productDto)
         {
@@ -57,7 +64,7 @@ namespace Product_Catalog.Services
                     }
                     else
                     {
-                        checkProduct = await Find(p => p.Name == model.Name);
+                        checkProduct = await Find(p => p.Name == model.Name && p.Id!=model.Id);
                         if (checkProduct != null)
                         {
                             output.Message = "There is another product with the same name !";

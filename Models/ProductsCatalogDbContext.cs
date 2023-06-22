@@ -26,5 +26,6 @@ namespace Product_Catalog.Models
         public DbSet<Product> Products { get; set;}
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product_Catalog.ViewModels.ProductsViewModel> ProductsViewModel { get; set; } = default!;
+        public DbSet<Product_Catalog.ViewModels.ActiveProductViewModel> ActiveProductViewModel { get; set; } = default!;
     }
 }
